@@ -2,6 +2,7 @@ package carystanley.extremefarming.block;
 
 import carystanley.extremefarming.common.ExtremeFarming;
 import carystanley.extremefarming.entity.EntityPlantTNTPrimed;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.block.Block;
@@ -16,6 +17,18 @@ public class BlockPlantTNT extends BlockTNT
     {
         super();
         this.type = type;
+    }
+    
+    @Override
+    public void onBlockDestroyedByExplosion(World p_149723_1_, int p_149723_2_, int p_149723_3_, int p_149723_4_, Explosion p_149723_5_)
+    {
+        if (!p_149723_1_.isRemote)
+        {
+        	EntityPlantTNTPrimed entitytntprimed = new EntityPlantTNTPrimed(p_149723_1_, (double)((float)p_149723_2_ + 0.5F), (double)((float)p_149723_3_ + 0.5F), (double)((float)p_149723_4_ + 0.5F), p_149723_5_.getExplosivePlacedBy());
+        	entitytntprimed.type = this.type;
+        	entitytntprimed.fuse = p_149723_1_.rand.nextInt(entitytntprimed.fuse / 4) + entitytntprimed.fuse / 8;
+            p_149723_1_.spawnEntityInWorld(entitytntprimed);
+        }
     }
 
     @Override

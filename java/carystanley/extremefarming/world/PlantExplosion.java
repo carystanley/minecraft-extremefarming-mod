@@ -66,6 +66,8 @@ public class PlantExplosion extends Explosion
             	} else {
                     this.worldObj.setBlock(i, j, k, (Block)ExtremeFarming.plantTntConfig[this.type][1], this.explosionRNG.nextInt((Integer)ExtremeFarming.plantTntConfig[this.type][2]), 3);
             	}
+            } else if (block.getMaterial() == Material.tnt) {
+            	block.onBlockExploded(this.worldObj, i, j, k, this);
             }
         }
     }
