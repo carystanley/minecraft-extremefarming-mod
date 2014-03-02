@@ -1,36 +1,29 @@
 package carystanley.extremefarming.entity;
 
+import io.netty.buffer.ByteBuf;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import carystanley.extremefarming.common.ExtremeFarming;
 import carystanley.extremefarming.world.PlantExplosion;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class EntityPlantTNTPrimed extends EntityTNTPrimed
+public class EntityPlantTNTPrimed extends EntityTNTPrimed implements IEntityAdditionalSpawnData
 {
-	public Block block;
+	public int type;
 
     public EntityPlantTNTPrimed(World par1World)
     {
         super(par1World);
-        fuse = 80;
-        if (par1World.isRemote) {
-            System.out.println("SPAWN CLIENT");
-        }
     }
 
-    public EntityPlantTNTPrimed(Block block, World par1World)
-    {
-        super(par1World);
-        this.block = block;
-    }
-
-    public EntityPlantTNTPrimed(Block block, World par1World, double par2, double par4, double par6, EntityLivingBase par8EntityLivingBase)
+    public EntityPlantTNTPrimed(World par1World, double par2, double par4, double par6, EntityLivingBase par8EntityLivingBase)
     {
         super(par1World, par2, par4, par6, par8EntityLivingBase);
-        this.block = block;
     }
 
     @Override
@@ -51,7 +44,7 @@ public class EntityPlantTNTPrimed extends EntityTNTPrimed
             this.motionZ *= 0.699999988079071D;
             this.motionY *= -0.5D;
         }
-
+        
         if (this.fuse-- <= 0)
         {
             this.setDead();
@@ -72,8 +65,34 @@ public class EntityPlantTNTPrimed extends EntityTNTPrimed
         float f = 4.0F;
         this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, f, false);
 
-        PlantExplosion explosion = new PlantExplosion(this.block, this.worldObj, this, this.posX, this.posY, this.posZ, f);
+        PlantExplosion explosion = new PlantExplosion(this.type, this.worldObj, this, this.posX, this.posY, this.posZ, f);
         explosion.doExplosionA();
         explosion.doExplosionB(false);
     }
+
+	@Override
+	public void readSpawnData(ByteBuf additionalData) {
+		this.fuse = additionalData.readInt();
+		this.type = additionalData.readInt();
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeInt(this.fuse);
+		buffer.writeInt(this.type);
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) 
+	{
+		super.writeEntityToNBT(par1nbtTagCompound);
+		par1nbtTagCompound.setInteger("Type", this.type);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound) 
+	{
+		super.readEntityFromNBT(par1nbtTagCompound);
+		this.type = par1nbtTagCompound.getInteger("Type");
+	}
 }

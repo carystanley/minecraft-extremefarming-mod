@@ -18,7 +18,6 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-
 import carystanley.extremefarming.client.renderer.entity.RenderPlantTNTPrimed;
 import carystanley.extremefarming.block.BlockPlantTNT;
 import carystanley.extremefarming.entity.EntityPlantTNTPrimed;
@@ -34,13 +33,37 @@ public class ExtremeFarming {
     // https://code.google.com/p/gun-powder-mod/source/browse/trunk/gun-powder-mod/Minecraft/modSrc/gunPowderMod/?r=40
     // https://github.com/NexusTools/ExpandedTNT/blob/master/src/net/nexustools/expandedtnt/DynamicTNT/RenderDynamicTNTPrimed.java
 
-    public static Block flowerTnt = (new BlockPlantTNT(Blocks.red_flower)).setHardness(0.0F).setBlockName("extremefarming:flowerTNT").setBlockTextureName("tnt");
-    public static Block wheatTnt = (new BlockPlantTNT(Blocks.wheat)).setHardness(0.0F).setBlockName("extremefarming:wheatTNT").setBlockTextureName("extremefarming:tnt_wheat");
-    public static Block carrotTnt = (new BlockPlantTNT(Blocks.carrots)).setHardness(0.0F).setBlockName("extremefarming:carrotTNT").setBlockTextureName("tnt");
-    public static Block potatoTnt = (new BlockPlantTNT(Blocks.potatoes)).setHardness(0.0F).setBlockName("extremefarming:potatoTNT").setBlockTextureName("tnt");
-    public static Block treeTnt = (new BlockPlantTNT(Blocks.sapling)).setHardness(0.0F).setBlockName("extremefarming:treeTNT").setBlockTextureName("tnt");
-    public static Block wartTnt = (new BlockPlantTNT(Blocks.nether_wart)).setHardness(0.0F).setBlockName("extremefarming:wartTNT").setBlockTextureName("tnt");
-    public static Block mushroomTnt = (new BlockPlantTNT(Blocks.brown_mushroom)).setHardness(0.0F).setBlockName("extremefarming:mushroomTNT").setBlockTextureName("tnt");
+    public static final int FLOWER_TNT = 0;
+    public static final int WHEAT_TNT = 1;
+    public static final int CARROT_TNT = 2;
+    public static final int POTATO_TNT = 3;
+    public static final int TREE_TNT = 4;
+    public static final int WART_TNT = 5;
+    public static final int MUSHROOM_TNT = 6;
+    public static final int MELON_TNT = 7;
+    public static final int PUMPKIN_TNT = 8;
+    
+    public static Block flowerTnt = (new BlockPlantTNT(FLOWER_TNT)).setHardness(0.0F).setBlockName("extremefarming:flowerTNT").setBlockTextureName("extremefarming:tnt_flower");
+    public static Block wheatTnt = (new BlockPlantTNT(WHEAT_TNT)).setHardness(0.0F).setBlockName("extremefarming:wheatTNT").setBlockTextureName("extremefarming:tnt_wheat");
+    public static Block carrotTnt = (new BlockPlantTNT(CARROT_TNT)).setHardness(0.0F).setBlockName("extremefarming:carrotTNT").setBlockTextureName("extremefarming:tnt_carrot");
+    public static Block potatoTnt = (new BlockPlantTNT(POTATO_TNT)).setHardness(0.0F).setBlockName("extremefarming:potatoTNT").setBlockTextureName("extremefarming:tnt_potato");
+    public static Block treeTnt = (new BlockPlantTNT(TREE_TNT)).setHardness(0.0F).setBlockName("extremefarming:treeTNT").setBlockTextureName("extremefarming:tnt_tree");
+    public static Block wartTnt = (new BlockPlantTNT(WART_TNT)).setHardness(0.0F).setBlockName("extremefarming:wartTNT").setBlockTextureName("extremefarming:tnt_wart");
+    public static Block mushroomTnt = (new BlockPlantTNT(MUSHROOM_TNT)).setHardness(0.0F).setBlockName("extremefarming:mushroomTNT").setBlockTextureName("extremefarming:tnt_brown_mushroom");
+    public static Block melonTnt = (new BlockPlantTNT(MELON_TNT)).setHardness(0.0F).setBlockName("extremefarming:melonTNT").setBlockTextureName("extremefarming:tnt_melon");
+    public static Block pumpkinTnt = (new BlockPlantTNT(PUMPKIN_TNT)).setHardness(0.0F).setBlockName("extremefarming:pumpkinTNT").setBlockTextureName("extremefarming:tnt_pumpkin");
+
+    public static final Object[][] plantTntConfig = new Object[][] {
+        {flowerTnt, Blocks.red_flower, 10},
+        {wheatTnt, Blocks.wheat, 8},
+        {carrotTnt, Blocks.carrots, 8},
+        {potatoTnt, Blocks.potatoes, 8},
+        {treeTnt, Blocks.sapling, 6},
+        {wartTnt, Blocks.nether_wart, 8},
+        {mushroomTnt, Blocks.brown_mushroom, 1},
+        {melonTnt, Blocks.melon_block, 1},
+        {pumpkinTnt, Blocks.pumpkin, 1},
+    };
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
@@ -51,9 +74,10 @@ public class ExtremeFarming {
         GameRegistry.registerBlock(treeTnt, "extremefarming:treeTNT");
         GameRegistry.registerBlock(wartTnt, "extremefarming:wartTNT");
         GameRegistry.registerBlock(mushroomTnt, "extremefarming:mushroomTNT");
-        // farmland
-        // punkkin or Mellon?
-        // cocoa
+        GameRegistry.registerBlock(pumpkinTnt, "extremefarming:pumpkinTNT");
+        GameRegistry.registerBlock(melonTnt, "extremefarming:melonTNT");
+        // farmland?
+        // cocoa?
 	}
 
     @EventHandler
@@ -64,18 +88,22 @@ public class ExtremeFarming {
 	
 	public void loadRecipes() {
 		GameRegistry.addRecipe(new ItemStack(flowerTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Blocks.red_flower});
+		GameRegistry.addRecipe(new ItemStack(flowerTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Blocks.yellow_flower});
 		GameRegistry.addRecipe(new ItemStack(wheatTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Items.wheat});
 		GameRegistry.addRecipe(new ItemStack(carrotTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Items.carrot});
 		GameRegistry.addRecipe(new ItemStack(potatoTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Items.potato});		
 		GameRegistry.addRecipe(new ItemStack(treeTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Blocks.sapling});		
 		GameRegistry.addRecipe(new ItemStack(wartTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Items.nether_wart});		
 		GameRegistry.addRecipe(new ItemStack(mushroomTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Blocks.brown_mushroom});		
+		GameRegistry.addRecipe(new ItemStack(mushroomTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Blocks.red_mushroom});		
+		GameRegistry.addRecipe(new ItemStack(melonTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Blocks.melon_block});		
+		GameRegistry.addRecipe(new ItemStack(pumpkinTnt, 1), new Object[] {"X#X", "#X#", "X#X", 'X', Items.gunpowder, '#', Blocks.pumpkin});		
 	}
 	
 	public void loadRenderers() {
+    	EntityRegistry.registerModEntity(EntityPlantTNTPrimed.class, "plantTntPrimed", 1, this, 80, 3, true);
         if (FMLCommonHandler.instance().getSide().isClient()) {
-        	EntityRegistry.registerModEntity(EntityPlantTNTPrimed.class, "plantTntPrimed", 1, this, 80, 3, true);
-			RenderingRegistry.registerEntityRenderingHandler(EntityPlantTNTPrimed.class, new RenderPlantTNTPrimed(wheatTnt));
+			RenderingRegistry.registerEntityRenderingHandler(EntityPlantTNTPrimed.class, new RenderPlantTNTPrimed());
         }
 	}
 

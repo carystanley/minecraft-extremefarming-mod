@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import carystanley.extremefarming.common.ExtremeFarming;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentProtection;
@@ -27,16 +28,15 @@ import net.minecraft.world.World;
 public class PlantExplosion extends Explosion
 {
 	private World worldObj;
-	public Block block;
+	public int type;
 	protected Random explosionRNG = new Random();
 
-    public PlantExplosion(Block block, World par1World, Entity par2Entity, double par3, double par5, double par7, float par9)
+    public PlantExplosion(int type, World par1World, Entity par2Entity, double par3, double par5, double par7, float par9)
     {
         super(par1World, par2Entity, par3, par5, par7, par9);
-        this.block = block;
+        this.type = type;
         this.worldObj = par1World;
     }
-
 
     @Override
     public void doExplosionB(boolean par1)
@@ -61,7 +61,7 @@ public class PlantExplosion extends Explosion
 
             if (block.getMaterial() == Material.air && (block1.getMaterial() == Material.ground || block1.getMaterial() == Material.grass || block1.getMaterial() == Material.sand) && this.explosionRNG.nextInt(3) != 0)
             {
-                this.worldObj.setBlock(i, j, k, this.block, this.explosionRNG.nextInt(8), 3);
+                this.worldObj.setBlock(i, j, k, (Block)ExtremeFarming.plantTntConfig[this.type][1], this.explosionRNG.nextInt((Integer)ExtremeFarming.plantTntConfig[this.type][2]), 3);
             }
         }
     }
