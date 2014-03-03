@@ -59,7 +59,7 @@ public class PlantExplosion extends Explosion
             block = this.worldObj.getBlock(i, j, k);
             Block block1 = this.worldObj.getBlock(i, j - 1, k);
 
-            if (block.getMaterial() == Material.air && (block1.getMaterial() == Material.ground || block1.getMaterial() == Material.grass || block1.getMaterial() == Material.sand) && this.explosionRNG.nextInt(3) != 0)
+            if (block.getMaterial() == Material.air && (block1.getMaterial() == Material.ground || block1.getMaterial() == Material.grass || block1.getMaterial() == Material.sand) && this.explosionRNG.nextInt((Integer)ExtremeFarming.plantTntConfig[this.type][5]) < (Integer)ExtremeFarming.plantTntConfig[this.type][4])
             {
             	if ((Integer)ExtremeFarming.plantTntConfig[this.type][3] == 1) {
                     this.worldObj.setBlock(i, j-1, k, (Block)ExtremeFarming.plantTntConfig[this.type][1], this.explosionRNG.nextInt((Integer)ExtremeFarming.plantTntConfig[this.type][2]), 3);            		
