@@ -1,0 +1,19 @@
+[
+{
+  "modid": "carystanley_extremefarming",
+  "name": "Extreme Farming",
+  "description": "Extending Minecraft with Extreme Farming!",
+  "version": "",
+  "credits": "Created by Cary Stanley",
+  "logoFile": "",
+  "mcversion": "",
+  "url": "http://carystanley.github.io/minecraft-extremefarming-mod/",
+  "updateUrl": "",
+  "authors": [ "carystanley" ],
+  "parent":"",
+  "screenshots": [],
+  "dependencies": [
+	 "mod_MinecraftForge"
+]
+}
+]
